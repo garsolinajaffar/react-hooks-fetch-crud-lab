@@ -1,93 +1,87 @@
 import React, { useState } from "react";
 
-function QuestionForm(props) {
-  const [formData, setFormData] = useState({
-    prompt: "",
-    answer1: "",
-    answer2: "",
-    answer3: "",
-    answer4: "",
-    correctIndex: 0,
-  });
+function NewQuestionForm({ onSubmit }) {
+  const [prompt, setPrompt] = useState("");
+  const [answers, setAnswers] = useState(["", "", "", ""]);
+  const [correctIndex, setCorrectIndex] = useState(0);
 
-  function handleChange(event) {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-  }
-
-  function handleSubmit(event) {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(formData);
-  }
+    onSubmit({ prompt, answers, correctIndex });
+    setPrompt("");
+    setAnswers(["", "", "", ""]);
+    setCorrectIndex(0);
+  };
+
+  const handleAnswerChange = (event, index) => {
+    const newAnswers = [...answers];
+    newAnswers[index] = event.target.value;
+    setAnswers(newAnswers);
+  };
 
   return (
-    <section>
-      <h1>New Question</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Prompt:
-          <input
-            type="text"
-            name="prompt"
-            value={formData.prompt}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Answer 1:
-          <input
-            type="text"
-            name="answer1"
-            value={formData.answer1}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Answer 2:
-          <input
-            type="text"
-            name="answer2"
-            value={formData.answer2}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Answer 3:
-          <input
-            type="text"
-            name="answer3"
-            value={formData.answer3}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Answer 4:
-          <input
-            type="text"
-            name="answer4"
-            value={formData.answer4}
-            onChange={handleChange}
-          />
-        </label>
-        <label>
-          Correct Answer:
-          <select
-            name="correctIndex"
-            value={formData.correctIndex}
-            onChange={handleChange}
-          >
-            <option value="0">{formData.answer1}</option>
-            <option value="1">{formData.answer2}</option>
-            <option value="2">{formData.answer3}</option>
-            <option value="3">{formData.answer4}</option>
-          </select>
-        </label>
-        <button type="submit">Add Question</button>
-      </form>
-    </section>
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label htmlFor="prompt">Prompt:</label>
+        <input
+          id="prompt"
+          type="text"
+          value={prompt}
+          onChange={(event) => setPrompt(event.target.value)}
+        />
+      </div>
+      <div>
+        <label htmlFor="answer0">Answer 1:</label>
+        <input
+          id="answer0"
+          type="text"
+          value={answers[0]}
+          onChange={(event) => handleAnswerChange(event, 0)}
+        />
+      </div>
+      <div>
+        <label htmlFor="answer1">Answer 2:</label>
+        <input
+          id="answer1"
+          type="text"
+          value={answers[1]}
+          onChange={(event) => handleAnswerChange(event, 1)}
+        />
+      </div>
+      <div>
+        <label htmlFor="answer2">Answer 3:</label>
+        <input
+          id="answer2"
+          type="text"
+          value={answers[2]}
+          onChange={(event) => handleAnswerChange(event, 2)}
+        />
+      </div>
+      <div>
+        <label htmlFor="answer3">Answer 4:</label>
+        <input
+          id="answer3"
+          type="text"
+          value={answers[3]}
+          onChange={(event) => handleAnswerChange(event, 3)}
+        />
+      </div>
+      <div>
+        <label htmlFor="correctIndex">Correct Answer:</label>
+        <select
+          id="correctIndex"
+          value={correctIndex}
+          onChange={(event) => setCorrectIndex(parseInt(event.target.value))}
+        >
+          <option value={0}>Answer 1</option>
+          <option value={1}>Answer 2</option>
+          <option value={2}>Answer 3</option>
+          <option value={3}>Answer 4</option>
+        </select>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
   );
 }
 
-export default QuestionForm;
+export default NewQuestionForm;

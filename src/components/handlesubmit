@@ -1,0 +1,28 @@
+const handleSubmit = (e) => {
+  e.preventDefault();
+  const newQuestion = {
+    prompt: questionPrompt,
+    answers: [answer1, answer2, answer3, answer4],
+    correctIndex: parseInt(correctAnswer)
+  };
+  fetch('http://localhost:4000/questions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newQuestion)
+  })
+  .then(response => response.json())
+  .then(data => {
+    setQuestions([...questions, data]);
+    setQuestionPrompt('');
+    setAnswer1('');
+    setAnswer2('');
+    setAnswer3('');
+    setAnswer4('');
+    setCorrectAnswer('1');
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
